@@ -1,7 +1,7 @@
 #include <vector> // vetor dinâmico
 #include <algorithm> // funções prontas
 #include <iostream> // imprimir coisas no terminal
-#include <queue> // fila
+#include <stack> // pilha 
 #include <unordered_set> //guardar estados visitados
 
 using namespace std;
@@ -51,24 +51,29 @@ void imprimir(const Estado& estado) {
 
 void resolverPuzzle(const Estado& estadoInicial) {
 
-    queue<Estado> fila;
+    stack<Estado> pilha;
 
     unordered_set<string> visitados;
 
-    fila.push(estadoInicial);
+    pilha.push(estadoInicial);
     visitados.insert(string(estadoInicial.begin(), estadoInicial.end()));
 
-    while (!fila.empty()) {
-        Estado atual = fila.front();
-        fila.pop();
+    int temp = 0;
 
-        /*cout << "Estado atual:" << endl;
+    while (!pilha.empty()) {
+        Estado atual = pilha.top();
+        pilha.pop();
+
+        temp++;
+
+        cout << "Estado atual:" << endl;
         imprimir(atual);  // Imprime o tabuleiro atual
-        cout << endl;*/
+        cout << endl;
 
         if (objetivo(atual)) {
             cout << "Estado Final:" << endl;
             imprimir(atual);  // Imprime o tabuleiro atual
+            cout <<"Iteracoes: " << temp << endl;
             cout << "Solucao encontrada!" << endl;
             return;
         }
@@ -77,24 +82,26 @@ void resolverPuzzle(const Estado& estadoInicial) {
             string chave(vizinho.begin(), vizinho.end());
             if (!visitados.count(chave)) {
                 visitados.insert(chave);
-                fila.push(vizinho);
+                pilha.push(vizinho);
             }
         }
     }
 
-    cout << "Nao foi possivel encontrar uma solucao." << endl;
+    cout << "Nao foi possivel encontrar uma solucao" << endl;
 }
 
 int main(){
 
-     // estado inicial exemplo
-     Estado estadoInicial = {1, 2, 3, 4, 5, 6, 0, 7, 8};
+    // estado inicial exemplo
+    Estado estadoInicial ={1, 2, 3,
+                           5, 0, 6,
+                           4, 7, 8};
 
-     cout << "Tabuleiro Inicial:" << endl;
+    cout << "Tabuleiro Inicial:" << endl;
         imprimir(estadoInicial);  // Imprime o tabuleiro inicial
-        cout << endl;
+    cout << endl;
 
-     resolverPuzzle(estadoInicial);
+    resolverPuzzle(estadoInicial);
  
      return 0;
 }
